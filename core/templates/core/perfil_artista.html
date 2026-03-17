@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Galería de {{ artista.usuario.username }} | ArtCommissions{% endblock %}
+
+{% block content %}
+<div class="row mb-5 justify-content-center">
+    <div class="col-md-8 text-center">
+        {% if artista.foto_perfil %}
+            <img src="{{ artista.foto_perfil.url }}" class="rounded-circle shadow mb-3" alt="{{ artista.usuario.username }}" style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--ac-purple);">
+        {% else %}
+            <div class="rounded-circle shadow mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border: 4px solid var(--ac-purple); background-color: #e9ecef;">
+                <i class="fa-solid fa-user fa-4x" style="color: #adb5bd;"></i>
+            </div>
+        {% endif %}
+        
+        <h2 class="fw-bold">@{{ artista.usuario.username }}</h2>
+        <p class="text-muted lead">{{ artista.biografia|default:"Este artista aún no ha escrito su biografía, pero su arte habla por sí solo." }}</p>
+    </div>
+</div>
+
+<hr class="mb-5">
+
+<h4 class="fw-bold mb-4"><i class="fa-solid fa-palette me-2" style="color: var(--ac-purple);"></i>Portafolio</h4>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for obra in obras %}
+    <div class="col">
+        <div class="card h-100 shadow-sm card-arte">
+            <img src="{{ obra.imagen.url }}" class="card-img-top" alt="{{ obra.titulo }}" style="object-fit: cover; height: 250px;">
+            <div class="card-body">
+                <h5 class="card-title">{{ obra.titulo }}</h5>
+                <p class="card-text text-truncate">{{ obra.descripcion }}</p>
+            </div>
+            <div class="card-footer bg-white border-top-0 d-grid">
+                <a href="{% url 'solicitar_comision' obra.id %}" class="btn btn-ac-primary">Solicitar Comisión</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-light text-center" role="alert">
+            Este artista aún no ha subido ninguna obra a su portafolio.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

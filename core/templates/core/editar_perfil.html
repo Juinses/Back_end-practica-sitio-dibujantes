@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Editar Perfil | ArtCommissions{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card card-arte shadow-sm p-4 border-0">
+            <h3 class="fw-bold text-center mb-4">
+                <i class="fa-solid fa-user-pen me-2" style="color: var(--ac-purple);"></i>Personaliza tu Perfil
+            </h3>
+            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-4 text-center">
+                    {% if user.perfil.foto_perfil %}
+                        <p class="text-muted small mb-2">Foto actual:</p>
+                        <img src="{{ user.perfil.foto_perfil.url }}" class="rounded-circle shadow-sm mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                    {% endif %}
+                    
+                    <div class="text-start">
+                        <label class="form-label fw-bold">{{ form.foto_perfil.label }}</label>
+                        {{ form.foto_perfil }}
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-bold">{{ form.biografia.label }}</label>
+                    {{ form.biografia }}
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-ac-primary">Guardar Cambios</button>
+                    <a href="{% url 'galeria' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

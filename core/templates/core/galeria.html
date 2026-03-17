@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Galería de Obras | Comisiones Bacanes{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold">Últimas Obras Publicadas</h2>
+        <p class="text-muted">Explora el talento y pide tu comisión.</p>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for obra in obras %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <img src="{{ obra.imagen.url }}" class="card-img-top" alt="{{ obra.titulo }}" style="object-fit: cover; height: 250px;">
+            
+            <div class="card-body">
+                <h5 class="card-title">{{ obra.titulo }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Por: @{{ obra.artista.usuario.username }}</h6>
+                <p class="card-text text-truncate">{{ obra.descripcion }}</p>
+            </div>
+            
+            <div class="card-footer bg-white border-top-0 d-grid">
+                <a href="{% url 'solicitar_comision' obra.id %}" class="btn btn-ac-primary w-100">Solicitar Comisión</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info" role="alert">
+            Aún no hay obras de arte publicadas. ¡Sé el primero en subir una desde el panel de administrador!
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

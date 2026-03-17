@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Nuestros Artistas | ArtCommissions{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12 text-center">
+        <h2 class="fw-bold"><i class="fa-solid fa-users me-2" style="color: var(--ac-purple);"></i>Comunidad de Artistas</h2>
+        <p class="text-muted">Descubre el talento y apoya a tus creadores favoritos.</p>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for artista in artistas %}
+    <div class="col">
+        <div class="card card-arte h-100 shadow-sm text-center p-4">
+            
+            {% if artista.foto_perfil %}
+                <img src="{{ artista.foto_perfil.url }}" class="rounded-circle mx-auto mb-3 shadow-sm" alt="{{ artista.usuario.username }}" style="width: 100px; height: 100px; object-fit: cover;">
+            {% else %}
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background-color: #e9ecef;">
+                    <i class="fa-solid fa-user fa-3x" style="color: #adb5bd;"></i>
+                </div>
+            {% endif %}
+            
+            <div class="card-body p-0">
+                <h5 class="card-title fw-bold mb-1">@{{ artista.usuario.username }}</h5>
+                <p class="text-muted small mb-3">
+                    {% if artista.biografia %}
+                        {{ artista.biografia|truncatewords:15 }}
+                    {% else %}
+                        Artista de la comunidad.
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div class="card-footer bg-white border-top-0 p-0 mt-3">
+                <a href="{% url 'perfil_artista' artista.usuario.username %}" class="btn btn-ac-outline btn-sm w-100">Ver Galería</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <div class="alert alert-light" role="alert">
+            Aún no hay artistas registrados en la plataforma.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

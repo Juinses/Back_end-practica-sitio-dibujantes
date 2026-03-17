@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Solicitar Comisión | ArtCommissions{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card card-arte shadow-sm p-4 border-0">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold">Nueva Comisión</h3>
+                <p class="text-muted">Estás solicitando arte a <strong>@{{ obra.artista.usuario.username }}</strong></p>
+            </div>
+            
+            <div class="text-center mb-4">
+                <img src="{{ obra.imagen.url }}" alt="Referencia" class="img-thumbnail" style="max-height: 150px; border-radius: 10px;">
+                <p class="small text-muted mt-2">Obra de referencia: {{ obra.titulo }}</p>
+            </div>
+            
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">{{ form.detalles_solicitud.label }}</label>
+                    {{ form.detalles_solicitud }}
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-bold">{{ form.precio_ofrecido.label }}</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        {{ form.precio_ofrecido }}
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-ac-primary">Enviar Solicitud</button>
+                    <a href="{% url 'galeria' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es-cl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ArtCommissions - Tu Plataforma de Arte{% endblock %}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --ac-purple: #712cf9; /* Color de Acento Vibrante */
+            --ac-bg: #fdfdfd;     /* Fondo Sutil */
+            --ac-text: #2a2a2a;   /* Texto Principal */
+            --ac-card-bg: #ffffff;/* Fondo de Tarjetas */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--ac-bg);
+            color: var(--ac-text);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+        }
+
+        /* --- Estilo Personalizado del Navbar --- */
+        .navbar-custom {
+            background-color: var(--ac-card-bg);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05); /* Sombra muy sutil */
+            padding: 1rem 0;
+        }
+
+        .navbar-custom .navbar-brand {
+            color: var(--ac-purple);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .navbar-custom .nav-link {
+            color: var(--ac-text);
+            font-weight: 400;
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-custom .nav-link:hover,
+        .navbar-custom .nav-link.active {
+            color: var(--ac-purple) !important;
+        }
+
+        .navbar-custom .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* --- Estilo de Botones Personalizados --- */
+        .btn-ac-primary {
+            background-color: var(--ac-purple);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px; /* Más redondeado */
+            transition: all 0.3s ease;
+        }
+
+        .btn-ac-primary:hover {
+            background-color: #5a23c8;
+            color: white;
+            transform: translateY(-2px); /* Pequeña animación al pasar el mouse */
+            box-shadow: 0 4px 10px rgba(113, 44, 249, 0.3);
+        }
+
+        .btn-ac-outline {
+            background-color: transparent;
+            color: var(--ac-purple);
+            border: 2px solid var(--ac-purple);
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-ac-outline:hover {
+            background-color: var(--ac-purple);
+            color: white;
+        }
+
+        /* --- Arreglos para los formularios de Django --- */
+        .card-arte form p {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .card-arte form input, .card-arte form textarea {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .card-arte form input:focus, .card-arte form textarea:focus {
+            outline: none;
+            border-color: var(--ac-purple);
+            box-shadow: 0 0 0 3px rgba(113, 44, 249, 0.25);
+        }
+
+        /* Magia negra para ocultar el "mucho texto" de las contraseñas */
+        .card-arte form .helptext, 
+        .card-arte form ul {
+            display: none; 
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top mb-5">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'galeria' %}">
+                <i class="fa-solid fa-palette me-2"></i>Comisiones Bacanes
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'galeria' %}">
+                            <i class="fa-solid fa-images me-1"></i>Galería
+                        </a>
+                    </li>
+                    
+                    {% if user.is_authenticated and user.perfil.es_artista %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/subir-obra/' in request.path %}active{% endif %}" href="{% url 'subir_obra' %}">
+                            <i class="fa-solid fa-upload me-1"></i>Subir Obra
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/artistas/' in request.path %}active{% endif %}" href="{% url 'lista_artistas' %}">
+                            <i class="fa-solid fa-users me-1"></i>Artistas
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav align-items-center">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fa-solid fa-circle-user me-1"></i>Hola, {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'editar_perfil' %}">
+                                        <i class="fa-solid fa-user-pen me-1"></i>Editar Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'panel_comisiones' %}">
+                                        <i class="fa-solid fa-list-check me-1"></i>Mis Comisiones
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="fa-solid fa-right-from-bracket me-1"></i>Cerrar Sesión
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i>Ingresar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-ac-outline ms-lg-2" href="{% url 'registro' %}">
+                                <i class="fa-solid fa-user-plus me-1"></i>Registrarse
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container pb-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
